@@ -29,7 +29,6 @@ class AnimalsController < ApplicationController
   def destroy
     @animal.destroy!
     render json: { message: 'Animal deleted' }, status: :ok
-
   end
 
   # GET /random
@@ -37,6 +36,27 @@ class AnimalsController < ApplicationController
     @animal = Animal.random
     # @animal = Animal.all.sample
     render json: @animal
+  end
+
+  # GET /search
+  def search
+    # byebug
+    allowed_keys = %w[animal_type breed sex min_age max_age min_weight max_weight]
+    passed_keys = params.keys - %w[controller action]
+    invalid_keys = passed_keys - allowed_keys
+    if invalid_keys.any?
+      message = "Invalid search keys: #{invalid_keys.join(', ')}. Valid keys are: #{allowed_keys.join(', ')}"
+      render json: { message: message }, status: :unprocessable_entity
+    else
+      @animals = Animal.find_by_type(params[:animal_type])
+                 .find_by_breed(params[:breed])
+                 .find_by_sex(params[:sex])
+                 .find_by_min_age(params[:min_age])
+                 .find_by_max_age(params[:max_age])
+                 .find_by_min_weight(params[:min_weight])
+                 .find_by_max_weight(params[:max_weight])
+      render json: @animals
+    end
   end
 
   private
