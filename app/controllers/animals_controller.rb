@@ -32,7 +32,7 @@ class AnimalsController < ApplicationController
 
   end
 
-  # GET /random_animal
+  # GET /random
   def random
     @animal = Animal.random
     # @animal = Animal.all.sample
