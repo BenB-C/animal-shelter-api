@@ -9,7 +9,7 @@ FactoryBot.define do
       weight { Random.rand(10..100) }
     end
     factory :cat do
-      animal_type { 'Dog' }
+      animal_type { 'Cat' }
       name { Faker::Creature::Cat.name }
       breed { Faker::Creature::Cat.breed }
       weight { Random.rand(1..20) }
