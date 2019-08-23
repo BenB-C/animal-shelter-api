@@ -135,8 +135,8 @@ RSpec.describe AnimalsController, type: :controller do
         expect(response_body["name"]).to eq(animal.name)
         expect(response_body["breed"]).to eq(animal.breed)
         expect(response_body["sex"]).to eq(animal.sex)
-        expect(response_body["age"].to_d).to eq(animal.age)
-        expect(response_body["weight"].to_d).to eq(animal.weight)
+        expect(response_body["age"].to_f).to eq(animal.age)
+        expect(response_body["weight"].to_f).to eq(animal.weight)
       end
     end
 
