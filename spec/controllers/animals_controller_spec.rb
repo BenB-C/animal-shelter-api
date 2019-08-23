@@ -29,11 +29,25 @@ RSpec.describe AnimalsController, type: :controller do
   # Animal. As you add validations to Animal, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      animal_type: "Dog",
+      name: "Abigail",
+      breed: "Shepherd - Hound",
+      sex: "Female",
+      age: 1,
+      weight: 49.5
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      animal_type: nil,
+      name: '',
+      breed: '',
+      sex: '',
+      age: 0,
+      weight: 0
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -43,7 +57,7 @@ RSpec.describe AnimalsController, type: :controller do
 
   describe "GET #index" do
     it "returns a success response" do
-      animal = Animal.create! valid_attributes
+      Animal.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
@@ -61,13 +75,13 @@ RSpec.describe AnimalsController, type: :controller do
     context "with valid params" do
       it "creates a new Animal" do
         expect {
-          post :create, params: {animal: valid_attributes}, session: valid_session
+          post :create, params: valid_attributes, session: valid_session
         }.to change(Animal, :count).by(1)
       end
 
       it "renders a JSON response with the new animal" do
 
-        post :create, params: {animal: valid_attributes}, session: valid_session
+        post :create, params: valid_attributes, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(animal_url(Animal.last))
@@ -77,7 +91,7 @@ RSpec.describe AnimalsController, type: :controller do
     context "with invalid params" do
       it "renders a JSON response with errors for the new animal" do
 
-        post :create, params: {animal: invalid_attributes}, session: valid_session
+        post :create, params: invalid_attributes, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -87,22 +101,42 @@ RSpec.describe AnimalsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          animal_type: "Cat",
+          name: "Aaron",
+          breed: "Domestic Short Hair",
+          sex: "Male",
+          age: 0.333,
+          weight: 6.1
+        }
       }
 
       it "updates the requested animal" do
         animal = Animal.create! valid_attributes
-        put :update, params: {id: animal.to_param, animal: new_attributes}, session: valid_session
-        animal.reload
-        skip("Add assertions for updated state")
+        put :update, params: new_attributes.merge(id: animal.id), session: valid_session
+        animal = Animal.find(animal.id)
+        expect(animal.animal_type).to eq(new_attributes[:animal_type])
+        expect(animal.name).to eq(new_attributes[:name])
+        expect(animal.breed).to eq(new_attributes[:breed])
+        expect(animal.sex).to eq(new_attributes[:sex])
+        expect(animal.age).to eq(new_attributes[:age])
+        expect(animal.weight).to eq(new_attributes[:weight])
       end
 
       it "renders a JSON response with the animal" do
         animal = Animal.create! valid_attributes
-
-        put :update, params: {id: animal.to_param, animal: valid_attributes}, session: valid_session
+        put :update, params: new_attributes.merge(id: animal.id), session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
+        response_body = JSON.parse(response.body)
+        animal = Animal.find(animal.id)
+        expect(response_body["id"]).to eq(animal.id)
+        expect(response_body["animal_type"]).to eq(animal.animal_type)
+        expect(response_body["name"]).to eq(animal.name)
+        expect(response_body["breed"]).to eq(animal.breed)
+        expect(response_body["sex"]).to eq(animal.sex)
+        expect(response_body["age"].to_d).to eq(animal.age)
+        expect(response_body["weight"].to_d).to eq(animal.weight)
       end
     end
 
@@ -110,7 +144,7 @@ RSpec.describe AnimalsController, type: :controller do
       it "renders a JSON response with errors for the animal" do
         animal = Animal.create! valid_attributes
 
-        put :update, params: {id: animal.to_param, animal: invalid_attributes}, session: valid_session
+        put :update, params: invalid_attributes.merge(id: animal.id), session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
