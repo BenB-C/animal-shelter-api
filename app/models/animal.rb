@@ -8,7 +8,7 @@ class Animal < ApplicationRecord
   validates :weight, presence: true
   validates :weight, numericality: { greater_than: 0 }
 
-  scope :random, -> { limit(1).order("RANDOM()") }
+  scope :random, -> { limit(1).order(Arel.sql("RANDOM()")) }
   scope :find_by_type, -> (animal_type) { where("animal_type ILIKE ?", "#{animal_type[0...3]}%") if animal_type.present? }
   scope :find_by_breed, -> (breed) { where("breed ILIKE ?", "%#{breed}%") if breed.present? }
   scope :find_by_sex, -> (sex) { where("sex ILIKE ?", "#{sex}%") if sex.present? }
