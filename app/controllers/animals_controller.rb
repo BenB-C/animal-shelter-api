@@ -15,27 +15,28 @@ class AnimalsController < ApplicationController
 
   # POST /animals
   def create
-    @animal = Animal.new(animal_params)
-
-    if @animal.save
-      render json: @animal, status: :created, location: @animal
-    else
-      render json: @animal.errors, status: :unprocessable_entity
-    end
+    @animal = Animal.create!(animal_params)
+    render json: @animal, status: :created, location: @animal
   end
 
   # PATCH/PUT /animals/1
   def update
-    if @animal.update(animal_params)
-      render json: @animal
-    else
-      render json: @animal.errors, status: :unprocessable_entity
-    end
+    @animal.update!(animal_params)
+    render json: @animal
   end
 
   # DELETE /animals/1
   def destroy
-    @animal.destroy
+    @animal.destroy!
+    render json: { message: 'Animal deleted' }, status: :ok
+
+  end
+
+  # GET /random_animal
+  def random
+    @animal = Animal.random
+    # @animal = Animal.all.sample
+    render json: @animal
   end
 
   private
