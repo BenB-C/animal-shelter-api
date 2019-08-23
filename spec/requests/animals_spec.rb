@@ -155,6 +155,17 @@ RSpec.describe "Animals", type: :request do
     end
   end
 
+  describe "GET /random" do
+    before do
+      get '/random'
+    end
+
+    it "returns a JSON response with status ok" do
+      expect(response.content_type).to eq('application/json')
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   # Helper methods
   def expect_json_response_to_match_animal(response, animal)
     response_body = JSON.parse(response.body)
@@ -174,16 +185,5 @@ RSpec.describe "Animals", type: :request do
     expect(animal.sex).to eq(params[:sex])
     expect(animal.age).to eq(params[:age])
     expect(animal.weight).to eq(params[:weight])
-  end
-
-  describe "GET /random" do
-    before do
-      get '/random'
-    end
-
-    it "returns a JSON response with status ok" do
-      expect(response.content_type).to eq('application/json')
-      expect(response).to have_http_status(:ok)
-    end
   end
 end
