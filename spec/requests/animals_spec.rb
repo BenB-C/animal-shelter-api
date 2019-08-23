@@ -175,4 +175,15 @@ RSpec.describe "Animals", type: :request do
     expect(animal.age).to eq(params[:age])
     expect(animal.weight).to eq(params[:weight])
   end
+
+  describe "GET /random" do
+    before do
+      get '/random'
+    end
+
+    it "returns a JSON response with status ok" do
+      expect(response.content_type).to eq('application/json')
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end
