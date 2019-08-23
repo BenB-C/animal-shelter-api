@@ -28,7 +28,7 @@ RSpec.describe "Animals", type: :request do
 
   describe "GET /animals" do
     before do
-      FactoryBot.create_list(:animal, 10)
+      FactoryBot.create_list(:cat, 10)
       get animals_path
     end
 
@@ -72,7 +72,7 @@ RSpec.describe "Animals", type: :request do
   end
 
   describe "GET /animals/:id" do
-    let (:animal) { FactoryBot.create(:animal) }
+    let (:animal) { FactoryBot.create(:dog) }
 
     context "with valid :id" do
       before do
@@ -99,7 +99,7 @@ RSpec.describe "Animals", type: :request do
   end
 
   describe "PUT /animals/:id" do
-    let (:animal) { FactoryBot.create(:animal) }
+    let (:animal) { FactoryBot.create(:cat) }
 
     context "with valid :id and params" do
       before do
@@ -137,7 +137,7 @@ RSpec.describe "Animals", type: :request do
   end
 
   describe "DELETE /animals/:id" do
-    let (:animal) { FactoryBot.create(:animal) }
+    let (:animal) { FactoryBot.create(:dog) }
 
     context "with valid :id" do
       it "destroys the requested animal" do
