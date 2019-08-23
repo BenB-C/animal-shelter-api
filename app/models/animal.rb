@@ -7,4 +7,6 @@ class Animal < ApplicationRecord
   validates :age, numericality: { greater_than: 0 }
   validates :weight, presence: true
   validates :weight, numericality: { greater_than: 0 }
+
+  scope :random, -> { limit(1).order("RANDOM()") }
 end

@@ -142,6 +142,7 @@ RSpec.describe "Animals", type: :request do
     context "with valid :id" do
       it "destroys the requested animal" do
         delete "/animals/#{animal.id}"
+        expect(response).to have_http_status(:ok)
         get "/animals/#{animal.id}"
         expect(response).to have_http_status(:not_found)
       end
