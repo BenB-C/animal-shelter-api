@@ -33,14 +33,12 @@ class AnimalsController < ApplicationController
 
   # GET /random
   def random
-    @animal = Animal.random
-    # @animal = Animal.all.sample
+    @animal = Animal.random[0]
     render json: @animal
   end
 
   # GET /search
   def search
-    # byebug
     allowed_keys = %w[animal_type breed sex min_age max_age min_weight max_weight]
     passed_keys = params.keys - %w[controller action]
     invalid_keys = passed_keys - allowed_keys
