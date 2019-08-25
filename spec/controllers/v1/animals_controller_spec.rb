@@ -23,7 +23,7 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe AnimalsController, type: :controller do
+RSpec.describe V1::AnimalsController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # Animal. As you add validations to Animal, be sure to
@@ -84,7 +84,7 @@ RSpec.describe AnimalsController, type: :controller do
         post :create, params: valid_attributes, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(animal_url(Animal.last))
+        expect(response.location).to eq(v1_animal_url(Animal.last))
       end
     end
 

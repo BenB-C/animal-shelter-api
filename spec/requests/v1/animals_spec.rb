@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Animals", type: :request do
+RSpec.describe "V1::Animals", type: :request do
 
   let(:valid_params) {
     {
@@ -26,10 +26,10 @@ RSpec.describe "Animals", type: :request do
 
   before(:each) { Animal.destroy_all }
 
-  describe "GET /animals" do
+  describe "GET /v1/animals" do
     before do
       FactoryBot.create_list(:cat, 10)
-      get animals_path
+      get v1_animals_path
     end
 
     it "returns a success status" do
@@ -41,10 +41,10 @@ RSpec.describe "Animals", type: :request do
     end
   end
 
-  describe "POST /animals" do
+  describe "POST /v1/animals" do
     context "with valid params" do
       before do
-        post '/animals', params: valid_params
+        post '/v1/animals', params: valid_params
       end
 
       it "cretes a new Animal" do
@@ -55,14 +55,14 @@ RSpec.describe "Animals", type: :request do
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         animal = Animal.find(JSON.parse(response.body)["id"])
-        expect(response.location).to eq(animal_url(animal))
+        expect(response.location).to eq(v1_animal_url(animal))
         expect_animal_to_match_params(animal, valid_params)
       end
     end
 
     context "with invalid params" do
       before do
-        post '/animals', params: invalid_params
+        post '/v1/animals', params: invalid_params
       end
 
       it "returns a unprocessable_entity status" do
@@ -71,12 +71,12 @@ RSpec.describe "Animals", type: :request do
     end
   end
 
-  describe "GET /animals/:id" do
+  describe "GET /v1/animals/:id" do
     let (:animal) { FactoryBot.create(:dog) }
 
     context "with valid :id" do
       before do
-        get "/animals/#{animal.id}"
+        get "/v1/animals/#{animal.id}"
       end
 
       it "returns a success status" do
@@ -92,18 +92,18 @@ RSpec.describe "Animals", type: :request do
 
     context "with invalid :id" do
       it "returns a not_found status" do
-        get "/animals/foo"
+        get "/v1/animals/foo"
         expect(response).to have_http_status(:not_found)
       end
     end
   end
 
-  describe "PUT /animals/:id" do
+  describe "PUT /v1/animals/:id" do
     let (:animal) { FactoryBot.create(:cat) }
 
     context "with valid :id and params" do
       before do
-        put "/animals/#{animal.id}", params: valid_params
+        put "/v1/animals/#{animal.id}", params: valid_params
         animal.reload
       end
 
@@ -123,41 +123,41 @@ RSpec.describe "Animals", type: :request do
 
     context "with valid :id and invalid params" do
       it "returns a unprocessable_entity status" do
-        put "/animals/#{animal.id}", params: invalid_params
+        put "/v1/animals/#{animal.id}", params: invalid_params
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
     context "with invalid :id" do
       it "returns a not_found status" do
-        put "/animals/foo", params: valid_params
+        put "/v1/animals/foo", params: valid_params
         expect(response).to have_http_status(:not_found)
       end
     end
   end
 
-  describe "DELETE /animals/:id" do
+  describe "DELETE /v1/animals/:id" do
     let (:animal) { FactoryBot.create(:dog) }
 
     context "with valid :id" do
       it "destroys the requested animal" do
-        delete "/animals/#{animal.id}"
+        delete "/v1/animals/#{animal.id}"
         expect(response).to have_http_status(:ok)
-        get "/animals/#{animal.id}"
+        get "/v1/animals/#{animal.id}"
         expect(response).to have_http_status(:not_found)
       end
     end
     context "with invalid :id" do
       it "returns a not_found status" do
-        delete "/animals/foo"
+        delete "/v1/animals/foo"
         expect(response).to have_http_status(:not_found)
       end
     end
   end
 
-  describe "GET /random" do
+  describe "GET /v1/random" do
     before do
-      get '/random'
+      get '/v1/random'
     end
 
     it "returns a JSON response with status ok" do
@@ -166,7 +166,7 @@ RSpec.describe "Animals", type: :request do
     end
   end
 
-  describe "GET /search" do
+  describe "GET /v1/search" do
     before do
     end
 
@@ -174,7 +174,7 @@ RSpec.describe "Animals", type: :request do
       it "returns only dogs if animal_type=dog is passed" do
         FactoryBot.create_list(:dog, 10)
         FactoryBot.create_list(:cat, 20)
-        get "/search", params: { animal_type: "dog" }
+        get "/v1/search", params: { animal_type: "dog" }
         response_body = JSON.parse(response.body)
         expect(response_body.size).to eq(10)
         response_body.each do |animal|
@@ -185,7 +185,7 @@ RSpec.describe "Animals", type: :request do
       it "returns only cats if animal_type=cats is passed" do
         FactoryBot.create_list(:dog, 10)
         FactoryBot.create_list(:cat, 20)
-        get "/search", params: { animal_type: "cats" }
+        get "/v1/search", params: { animal_type: "cats" }
         response_body = JSON.parse(response.body)
         expect(response_body.size).to eq(20)
         response_body.each do |obj|
@@ -196,7 +196,7 @@ RSpec.describe "Animals", type: :request do
       it "returns only retrievers if breed=retriever is passed" do
         animal = FactoryBot.create(:dog, breed: "Retriever")
         FactoryBot.create(:dog, breed: "Shepherd")
-        get "/search", params: { breed: "retriever" }
+        get "/v1/search", params: { breed: "retriever" }
         response_body = JSON.parse(response.body)
         response_body.each do |obj|
           expect(obj["breed"].include?("Retriever")).to eq(true)
@@ -214,7 +214,7 @@ RSpec.describe "Animals", type: :request do
       it "returns only male animals if sex=male is passed" do
         animal = FactoryBot.create(:dog, sex: "Male")
         FactoryBot.create(:dog, sex: "Cat")
-        get "/search", params: { sex: "male" }
+        get "/v1/search", params: { sex: "male" }
         response_body = JSON.parse(response.body)
         response_body.each do |obj|
           expect(obj["sex"]).to eq("Male")
@@ -232,7 +232,7 @@ RSpec.describe "Animals", type: :request do
       it "returns only animals over a certain age if min_age is given" do
         animal = FactoryBot.create(:dog, age: 10)
         FactoryBot.create(:dog, age: 5)
-        get "/search", params: { min_age: 6 }
+        get "/v1/search", params: { min_age: 6 }
         response_body = JSON.parse(response.body)
         response_body.each do |obj|
           expect(obj["age"] >= 6).to be(true)
@@ -250,7 +250,7 @@ RSpec.describe "Animals", type: :request do
       it "returns only animals under a certain age if max_age is given" do
         animal = FactoryBot.create(:dog, age: 5)
         FactoryBot.create(:dog, age: 10)
-        get "/search", params: { max_age: 6 }
+        get "/v1/search", params: { max_age: 6 }
         response_body = JSON.parse(response.body)
         response_body.each do |obj|
           expect(obj["age"] <= 6).to be(true)
@@ -269,7 +269,7 @@ RSpec.describe "Animals", type: :request do
         animal = FactoryBot.create(:dog, age: 5)
         FactoryBot.create(:dog, age: 10)
         FactoryBot.create(:cat, age: 1)
-        get "/search", params: { min_age: 2, max_age: 9 }
+        get "/v1/search", params: { min_age: 2, max_age: 9 }
         response_body = JSON.parse(response.body)
         response_body.each do |obj|
           age = obj["age"]
@@ -290,7 +290,7 @@ RSpec.describe "Animals", type: :request do
         animal = FactoryBot.create(:cat, sex: "Female")
         FactoryBot.create(:dog, sex: "Female")
         FactoryBot.create(:cat, sex: "Male")
-        get "/search", params: { animal_type: "cats", sex: "female" }
+        get "/v1/search", params: { animal_type: "cats", sex: "female" }
         response_body = JSON.parse(response.body)
         response_body.each do |obj|
           expect(obj["animal_type"]).to eq("Cat")
@@ -309,7 +309,7 @@ RSpec.describe "Animals", type: :request do
 
     context "with invalid params" do
       it "returns a JSON response with status unprocessable_entity" do
-        get "/search", params: { foo: "Dog" }
+        get "/v1/search", params: { foo: "Dog" }
         expect(response.content_type).to eq('application/json')
         expect(response).to have_http_status(:unprocessable_entity)
       end

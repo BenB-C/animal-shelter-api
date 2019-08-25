@@ -42,18 +42,18 @@ rails server
 
 ## API Endpoints
 
-#### GET /animals
+#### GET /v1/animals
 
 * Returns a list of all animals
 * Http status: 200
 
-#### GET /animals/:id
+#### GET /v1/animals/:id
 
 * Returns the animal with the given :id, or an error message if no animal exists with the given :id
 * Http status: 200 (valid :id) or 404 (invalid :id)
 
 Sample Request:<br>
-`GET http://localhost:3000/animals/1`
+`GET http://localhost:3000/v1/animals/1`
 
 Sample Response:
 ```
@@ -69,7 +69,7 @@ Sample Response:
     "updated_at": "2019-08-23T22:35:47.068Z"
 }
 ```
-#### POST /animals
+#### POST /v1/animals
 
 * Adds an animal record to the database
 * Parameters:
@@ -83,7 +83,7 @@ Sample Response:
 422 (invalid params)
 
 Sample Request:<br>
-`POST http://localhost:3000/animals/?animal_type=Dog&name=Abigail&breed=Shepherd&sex=Female&age=1&weight=49.5`
+`POST http://localhost:3000/v1/animals/?animal_type=Dog&name=Abigail&breed=Shepherd&sex=Female&age=1&weight=49.5`
 
 Sample Response:
 ```
@@ -100,14 +100,14 @@ Sample Response:
 }
 ```
 
-#### PATCH/PUT /animals/:id
+#### PATCH/PUT /v1/animals/:id
 * Edits the record with the given :id's attributes and returns the updated record
-* Parameters are the same as for `POST /animals`
+* Parameters are the same as for `POST /v1/animals`
 * Http status: 201 (valid params) or
 422 (invalid params)
 
 Sample Request:<br>
-`PUT http://localhost:3000/animals/13?name=Max&weight=42`
+`PUT http://localhost:3000/v1/animals/13?name=Max&weight=42`
 
 Sample Response:
 ```
@@ -124,12 +124,12 @@ Sample Response:
 }
 ```
 
-#### DELETE /animals/:id
+#### DELETE /v1/animals/:id
 * Deletes the record with the given :id and returns a confirmation message
 * Http status: 200 (valid :id) or 404 (invalid :id)
 
 Sample Request:<br>
-`DELETE http://localhost:3000/animals/13`
+`DELETE http://localhost:3000/v1/animals/13`
 
 Sample Response:
 ```
