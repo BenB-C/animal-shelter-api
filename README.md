@@ -138,11 +138,11 @@ Sample Response:
 }
 ```
 
-#### GET /random
+#### GET /v1/random
 * Returns a random record from the database
 
 Sample Request:<br>
-`GET http://localhost:3000/random`
+`GET http://localhost:3000/v1/random`
 
 Sample Response:
 ```
@@ -159,7 +159,7 @@ Sample Response:
 }
 ```
 
-#### GET /search
+#### GET /v1/search
 * Returns a list of all animals matching the given search parameters
 * Parameters:
   * `animal_type`
@@ -173,7 +173,7 @@ Sample Response:
 422 (invalid params)
 
 Sample Request:<br>
-`GET http://localhost:3000/search/?animal_type=dog&breed=shepherd&sex=female`
+`GET http://localhost:3000/v1/search/?animal_type=dog&breed=shepherd&sex=female`
 
 Sample Response:
 ```
